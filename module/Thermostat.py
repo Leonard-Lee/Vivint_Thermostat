@@ -25,3 +25,14 @@ class Thermostat(object):
             self.hot_set_point = 100;
         elif point < 70:
             self.hot_set_point = 70
+
+    def json(self):
+        return {
+            'id': self._id,
+            'temp': self._tmp,
+            'name': self.name,
+            'operation_mode': self.operation_mode,
+            'cool_set_point': self.cool_set_point,
+            'hot_set_point': self.hot_set_point,
+            'fan_mode': self.fan_mode
+        }
