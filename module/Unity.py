@@ -9,5 +9,12 @@ class Unity(object):
 
         self.last_id = 0
 
+    # provide UUID for thermostat ID
+    def getLastID(self):
+        id = self.last_id
+        self.last_id += 1
+        return id
+
+    # provide temperature degree(gF)
     def getTemperature(self):
         return random.randint(30, 120)
