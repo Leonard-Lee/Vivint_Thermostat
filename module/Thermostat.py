@@ -1,8 +1,10 @@
+import Unity
+
 class Thermostat(object):
     def __init__(self, name):
-        # private variables
-        self._id = Unity.getID()
-        self._tmp = Unity.getTemp()
+        # public variables (assigned automatically)
+        self.id = Unity.getLastID()
+        self.tmp = Unity.getTemperature()
 
         # public variables
         self.name = name
@@ -28,8 +30,8 @@ class Thermostat(object):
 
     def json(self):
         return {
-            'id': self._id,
-            'temp': self._tmp,
+            'id': self.id,
+            'temp': self.tmp,
             'name': self.name,
             'operation_mode': self.operation_mode,
             'cool_set_point': self.cool_set_point,
