@@ -2,6 +2,8 @@ import web
 
 class RESTfulCtrlr(object):
     methods = ("get", "create", "update", "delete", "getAll", "updateAll", "deleteAll")
+    def __init__(self):
+        web.header('Content-Type', 'application/json')
 
     def __getattr__(self, name):
         if name in self.methods and "headers" in web.ctx:
