@@ -21,8 +21,20 @@ The goal aim to support truly RESTful Web API for Vivint Smart Home Thermostat.
 ### URL examples
 * List of thermostat:
     * GET http://www.example.com/thermostat
-* A single thermostat in JSON format:
+* Search one single thermostat in JSON format by ID:
     * GET http://www.example.com/thermostat/33
+* Create a new thermostat in JSON format:
+    * POST http://www.example.com/thermostat {"name": "upstairs"}
+* Update partial info of one thermostat in JSON format by ID:
+    * PUT http://www.example.com/thermostat/2 {"cool_set_point": 70}
+* Update partial info of all thermostat in JSON format:
+    * PUT http://www.example.com/thermostat {"hot_set_point": 70}
+* Delete one thermostat by ID:
+    * DELETE http://www.example.com/thermostat/2
+* Delete all thermostats:
+    * DELETE http://www.example.com/thermostat
+
+
 
 
 ## HTTP Verbs
