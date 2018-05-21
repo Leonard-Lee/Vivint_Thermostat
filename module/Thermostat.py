@@ -1,4 +1,4 @@
-import Unity
+from Unity import Unity
 
 class Thermostat(object):
     def __init__(self, name):
