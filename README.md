@@ -8,7 +8,7 @@
 
 ## Goal
 
-The goal aim to support a truly RESTful API for Vivint Smart Home Thermostat.
+The goal aim to support truly RESTful Web API for Vivint Smart Home Thermostat.
 
 ## RESTful URLs
 
@@ -29,11 +29,11 @@ The goal aim to support a truly RESTful API for Vivint Smart Home Thermostat.
 
 Here's an example of how HTTP verbs map to create, read, update, delete operations for Vivint Smart Home Thermostat:
 
-| HTTP METHOD   | POST                    | GET                       | PUT                          | DELETE                |
-| --------------| ------------------------| --------------------------| -----------------------------| ----------------------|
-| CRUD OP       | CREATE                  | READ                      | UPDATE                       | DELETE                |
-| /thermostat   | Create a new thermostat | List all thermostats      | Bulk update                  | Delete all thermostats|
-| /thermostat/3 | Error                   | Show the 3rd thermostat   | If exists, update the 3rd one| Delete the 3rd one    |
+| HTTP METHOD   | POST                    | GET                       | PUT                                 | DELETE                          |
+| --------------| ------------------------| --------------------------| ------------------------------------| --------------------------------|
+| CRUD OP       | CREATE                  | READ                      | UPDATE                              | DELETE                          |
+| /thermostat   | Create a new thermostat | List all thermostats      | Bulk update                         | Delete all thermostats          |
+| /thermostat/3 | Error                   | Show the 3rd thermostat   | If exists, update the 3rd thermostat| Delete the 3rd thermostat|
 
 ## Error handling
 
