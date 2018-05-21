@@ -2,11 +2,9 @@ import json
 import web
 from RESTfulCtrlr import RESTfulCtrlr
 from Thermostat import Thermostat
-from Unity import Unity
 
 urls = (
     r'/thermostat(?:/(?P<resource_id>[0-9]+))?',
-    # r'/thermostat/(?P<resource_id>[0-9]+))?',
     'ThermoCtrlr',
 )
 
@@ -24,10 +22,7 @@ class ThermoCtrlr(RESTfulCtrlr):
     def getAll(self):
         if not web.dict_id_thermostat:
             raise web.notfound
-        list = []
-        for key, val in web.dict_id_thermostat.items():
-            list.append(val.json())
-        return json.dumps(list)
+        return self.jsonfyDict()
 
     # create whole thermostat
     def create(self):
@@ -46,20 +41,16 @@ class ThermoCtrlr(RESTfulCtrlr):
             raise web.nocontent
 
     def deleteAll(self):
-        if not web.dict_id_thermostat:
-            web.application
-            raise web.notfound
-        else:
+        if web.dict_id_thermostat:
             web.dict_id_thermostat.clear()
             raise web.nocontent
+        else:
+            raise Exception(web.notfound)
 
-    def update(self):
+    def update(self, id):
         data = json.loads(web.data())
-        if not 'id' in data:
-            raise web.notfound
-
-        id = data.get('id')
-        thermostat = web.dict_id_thermostat.get(int(id))
+        id = int(id)
+        thermostat = web.dict_id_thermostat.get(id)
         for key in data.keys():
             if hasattr(thermostat, key):
                 setattr(thermostat, key, data.get(key))
@@ -67,6 +58,7 @@ class ThermoCtrlr(RESTfulCtrlr):
                 raise web.notfound
 
         web.dict_id_thermostat[id] = thermostat
+        return json.dumps(thermostat.json())
 
     def updateAll(self):
         data = json.loads(web.data())
@@ -77,6 +69,14 @@ class ThermoCtrlr(RESTfulCtrlr):
                 else:
                     raise web.notfound
             web.dict_id_thermostat[id] = thermostat
+        return self.jsonfyDict()
+
+    # for return all items in dict in memory
+    def jsonfyDict(self):
+        list = []
+        for key, val in web.dict_id_thermostat.items():
+            list.append(val.json())
+        return json.dumps(list)
 
     # GET / tickets / 12 / messages - Retrieves list of messages for ticket  # 12
     # PUT / tickets / 12 / messages / 5 - Updates message  # 5 for ticket #12
