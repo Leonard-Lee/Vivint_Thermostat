@@ -6,8 +6,9 @@ class Unity(object):
 
     @classmethod
     def getLastID(cls):
-        id = web.last_id
-        web.last_id += 1
+        session = web.config.session
+        id = session['count']
+        session['count'] += 1
         return id
 
     # provide temperature degree(F)
