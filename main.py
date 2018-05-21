@@ -16,27 +16,29 @@ class ThermoCtrlr(RESTfulCtrlr):
         super(ThermoCtrlr, self).__init__()
 
     def get(self, id):
-        if not id in web.dict_id_thermostat:
+        id = int(id)
+        if not id in web.dict_id_thermostat.keys():
             raise web.notfound
-        return json.dumps(web.dict_id_thermostat(id).json())
+        return json.dumps(web.dict_id_thermostat.get(id).json())
 
     def getAll(self):
         if not web.dict_id_thermostat:
             raise web.notfound
         list = []
-        for key, val in web.dict_id_thermostat:
+        for key, val in web.dict_id_thermostat.items():
             list.append(val.json())
         return json.dumps(list)
 
     # create whole thermostat
     def create(self):
         data = json.loads(web.data())
-        thermostat = Thermostat(data['name'], web)
+        thermostat = Thermostat(data['name'])
         web.dict_id_thermostat[thermostat.id] = thermostat
         return json.dumps(thermostat.json())
 
     def delete(self, id):
-        thermostat = web.dict_id_thermostat.get(id, None)
+        id = int(id)
+        thermostat = web.dict_id_thermostat.get(id)
         if thermostat is None:
             raise web.notfound
         else:
@@ -44,7 +46,8 @@ class ThermoCtrlr(RESTfulCtrlr):
             raise web.nocontent
 
     def deleteAll(self):
-        if len(web.dict_id_thermostat) == 0:
+        if not web.dict_id_thermostat:
+            web.application
             raise web.notfound
         else:
             web.dict_id_thermostat.clear()
@@ -56,7 +59,7 @@ class ThermoCtrlr(RESTfulCtrlr):
             raise web.notfound
 
         id = data.get('id')
-        thermostat = web.dict_id_thermostat.get(id)
+        thermostat = web.dict_id_thermostat.get(int(id))
         for key in data.keys():
             if hasattr(thermostat, key):
                 setattr(thermostat, key, data.get(key))
@@ -67,7 +70,7 @@ class ThermoCtrlr(RESTfulCtrlr):
 
     def updateAll(self):
         data = json.loads(web.data())
-        for id, thermostat in web.dict_id_thermostat:
+        for id, thermostat in web.dict_id_thermostat.items():
             for data_key in data.keys():
                 if hasattr(thermostat, data_key):
                     setattr(thermostat, data_key, data.get(data_key))
@@ -81,5 +84,5 @@ class ThermoCtrlr(RESTfulCtrlr):
 if __name__ == "__main__":
     app = web.application(urls, globals())
     web.dict_id_thermostat = {}
-    web.last_id = 0
+    web.last_id = 1
     app.run()
