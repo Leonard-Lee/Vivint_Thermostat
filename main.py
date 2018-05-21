@@ -14,12 +14,12 @@ class ThermoCtrlr(RESTfulCtrlr):
     def get(self, id):
         id = int(id)
         if not id in self.dict_id_thermostat.keys():
-            raise web.notfound
+            raise web.notfound()
         return json.dumps(self.dict_id_thermostat.get(id).json())
 
     def getAll(self):
         if not self.dict_id_thermostat:
-            raise web.notfound
+            raise web.notfound()
         return self.jsonfyDict()
 
     # create whole thermostat
@@ -33,7 +33,7 @@ class ThermoCtrlr(RESTfulCtrlr):
         id = int(id)
         thermostat = self.dict_id_thermostat.get(id)
         if thermostat is None:
-            raise web.notfound
+            raise web.notfound()
         else:
             self.dict_id_thermostat.pop(id)
             raise web.nocontent
@@ -43,22 +43,29 @@ class ThermoCtrlr(RESTfulCtrlr):
             self.dict_id_thermostat.clear()
             raise web.nocontent
         else:
-            raise Exception(web.notfound)
+            raise web.notfound()
 
     def update(self, id):
         data = json.loads(web.data())
         id = int(id)
         thermostat = self.dict_id_thermostat.get(id)
+        # not found the thermostat
+        if not thermostat:
+            raise web.notfound()
+
         for key in data.keys():
             if hasattr(thermostat, key):
                 setattr(thermostat, key, data.get(key))
             else:
-                raise web.notfound
+                raise web.notfound()
 
         self.dict_id_thermostat[id] = thermostat
         return json.dumps(thermostat.json())
 
     def updateAll(self):
+        if not self.dict_id_thermostat:
+            raise web.notfound()
+
         data = json.loads(web.data())
         for id, thermostat in self.dict_id_thermostat.items():
             for data_key in data.keys():
@@ -79,13 +86,20 @@ class ThermoCtrlr(RESTfulCtrlr):
     # GET / tickets / 12 / messages - Retrieves list of messages for ticket  # 12
     # PUT / tickets / 12 / messages / 5 - Updates message  # 5 for ticket #12
 
-if __name__ == "__main__":
+if __name__ == '__main__':
     # define router, application and session
     urls = (
         r'/thermostat(?:/(?P<resource_id>[0-9]+))?',
         'ThermoCtrlr',
     )
     app = web.application(urls, globals())
+    # customize notfound error message
+    def notfound():
+        err = 'Sorry, the item you were searching or updating was not found.'
+        return web.notfound(json.dumps({'result': err}))
+
+    app.notfound = notfound
+
     if not web.config.get('session'):
         init = {'count': 1, 'dict_id_thermostat': {}}
         ### Store the data in the directory './sessions'
